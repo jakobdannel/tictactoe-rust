@@ -7,21 +7,18 @@ enum Square {
 }
 
 fn main() {
-    let board: Vec<Vec<Square>> = vec![
-        vec![Square::X, Square::Empty, Square::O],
-        vec![Square::X, Square::Empty, Square::O],
-        vec![Square::X, Square::Empty, Square::O],
-    ];
-
-    print!("Please enter the playing field:");
+    print!("Please enter the playing field (X,O, ,...):");
     let mut input: String = String::new();
     stdout().flush().ok();
     match stdin().read_line(&mut input) {
-        Ok(_n) => println!("{}", input),
+        Ok(_n) => println!("Input accepted."),
         Err(e) => println!("error: {}", e),
     }
+    input.pop(); //Removes the newline from the string
+    let temp_board: Vec<Square>= input.split_terminator(",").filter(|x| ["X","O"," "].contains(x)).map(|s| {convert_string_to_square(s)}).collect();
+    let board: Vec<_> = temp_board.chunks(3).map(|slice| slice.to_vec()).collect();
     print_board(&board);
-    println!("{:?}", winner(board));
+    println!("Winner: {:?}", winner(board));
 }
 
 fn winner(board: Vec<Vec<Square>>) -> Square {
@@ -89,3 +86,15 @@ fn print_board(board: &Vec<Vec<Square>>) {
        println!("+---+---+---+");
     }
 } 
+
+fn convert_string_to_square (input: &str) -> Square {
+    let output: Square;
+    if input == "X" {
+        output = Square::X;
+    } else if input == "O" {
+        output = Square::O;
+    } else {
+        output = Square::Empty;
+    }
+    output
+}
