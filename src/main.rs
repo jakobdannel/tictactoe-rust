@@ -14,13 +14,19 @@ fn main() {
         Ok(_n) => println!("Input accepted."),
         Err(e) => println!("error: {}", e),
     }
-    input.pop(); //Removes the newline from the string
-    let temp_board: Vec<Square>= input.split_terminator(",").filter(|x| ["X","O"," "].contains(x)).map(|s| {convert_string_to_square(s)}).collect(); //Converts string to one dimensional vector with Square enum type
-    let board: Vec<_> = temp_board.chunks(3).map(|slice| slice.to_vec()).collect(); //Convert one dimensional vector to two dimensions
+    
+    //Removes the newline from the string
+    input.pop();
+    //Converts string to one dimensional vector with Square enum type
+    let temp_board: Vec<Square>= input.split_terminator(",").filter(|x| ["X","O"," "].contains(x)).map(|s| {convert_string_to_square(s)}).collect();
+    //Convert one dimensional vector to two dimensions
+    let board: Vec<_> = temp_board.chunks(3).map(|slice| slice.to_vec()).collect();
+
     print_board(&board);
     println!("Winner: {:?}", winner(board));
 }
 
+///Determines the winner of a given board
 fn winner(board: Vec<Vec<Square>>) -> Square {
     let mut winner: Square = Square::Empty;
     let mut count_x: usize;
@@ -61,7 +67,8 @@ fn winner(board: Vec<Vec<Square>>) -> Square {
     winner
 }
 
-fn morethantwo(count_x: usize, count_o: usize, previous_winner: Square) -> Square { //Checks if counter variables are larger than two and keeps the previous winner if not
+///Checks if counter variables are larger than two and keeps the previous winner if not
+fn morethantwo(count_x: usize, count_o: usize, previous_winner: Square) -> Square { 
     let mut winner: Square = previous_winner;
     if count_x == 3 {
         winner = Square::X;
@@ -72,6 +79,7 @@ fn morethantwo(count_x: usize, count_o: usize, previous_winner: Square) -> Squar
     winner
 }
 
+///Prints a given board with borders 
 fn print_board(board: &Vec<Vec<Square>>) {
     println!("+---+---+---+");
     for x in 0..3 {
@@ -85,9 +93,10 @@ fn print_board(board: &Vec<Vec<Square>>) {
         print!("|\n");
        println!("+---+---+---+");
     }
-} 
+}
 
-fn convert_string_to_square (input: &str) -> Square { //Converts an String input into a Square enum
+///Converts an String input into a Square enum
+fn convert_string_to_square (input: &str) -> Square { 
     let output: Square;
     if input == "X" {
         output = Square::X;
