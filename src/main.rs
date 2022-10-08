@@ -14,7 +14,7 @@ fn main() {
     ];
 
     print!("Please enter the playing field:");
-    let mut input = String::new();
+    let mut input: String = String::new();
     stdout().flush().ok();
     match stdin().read_line(&mut input) {
         Ok(_n) => println!("{}", input),
@@ -26,8 +26,8 @@ fn main() {
 
 fn winner(board: Vec<Vec<Square>>) -> Square {
     let mut winner: Square = Square::Empty;
-    let mut count_x;
-    let mut count_o;
+    let mut count_x: usize;
+    let mut count_o: usize;
     //Checks for vertical and horizontal wins
     for x in 0..3 {
         if board[x][0] == board[x][1] && board[x][1] == board[x][2] {
@@ -64,7 +64,7 @@ fn winner(board: Vec<Vec<Square>>) -> Square {
     winner
 }
 
-fn morethantwo(count_x: u32, count_o: u32, previous_winner: Square) -> Square {
+fn morethantwo(count_x: usize, count_o: usize, previous_winner: Square) -> Square {
     let mut winner: Square = previous_winner;
     if count_x == 3 {
         winner = Square::X;
