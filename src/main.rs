@@ -8,9 +8,9 @@ enum Square {
 
 fn main() {
     let board: Vec<Vec<Square>> = vec![
-        vec![Square::X, Square::X, Square::O],
-        vec![Square::X, Square::O, Square::O],
-        vec![Square::X, Square::O, Square::O],
+        vec![Square::X, Square::Empty, Square::O],
+        vec![Square::X, Square::Empty, Square::O],
+        vec![Square::X, Square::Empty, Square::O],
     ];
 
     print!("Please enter the playing field:");
@@ -20,7 +20,7 @@ fn main() {
         Ok(_n) => println!("{}", input),
         Err(e) => println!("error: {}", e),
     }
-
+    print_board(&board);
     println!("{:?}", winner(board));
 }
 
@@ -75,4 +75,17 @@ fn morethantwo(count_x: u32, count_o: u32, previous_winner: Square) -> Square {
     winner
 }
 
- 
+fn print_board(board: &Vec<Vec<Square>>) {
+    println!("+---+---+---+");
+    for x in 0..3 {
+        for y in 0..3 {
+            if board[x][y] != Square::Empty {
+                print!("| {:?} ",board[x][y]);
+            } else {
+                print!("|   ");
+            }
+        }
+        print!("|\n");
+       println!("+---+---+---+");
+    }
+} 
