@@ -1,21 +1,31 @@
+use std::io::{Write, stdout, stdin};
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum Field {
+enum Square {
     X,
     O,
     Empty,
 }
 
 fn main() {
-    let board: Vec<Vec<Field>> = vec![
-        vec![Field::X, Field::X, Field::O],
-        vec![Field::X, Field::O, Field::O],
-        vec![Field::X, Field::O, Field::O],
+    let board: Vec<Vec<Square>> = vec![
+        vec![Square::X, Square::X, Square::O],
+        vec![Square::X, Square::O, Square::O],
+        vec![Square::X, Square::O, Square::O],
     ];
+
+    print!("Please enter the playing field:");
+    let mut input = String::new();
+    stdout().flush().ok();
+    match stdin().read_line(&mut input) {
+        Ok(_n) => println!("{}", input),
+        Err(e) => println!("error: {}", e),
+    }
+
     println!("{:?}", winner(board));
 }
 
-fn winner(board: Vec<Vec<Field>>) -> Field {
-    let mut winner: Field = Field::Empty;
+fn winner(board: Vec<Vec<Square>>) -> Square {
+    let mut winner: Square = Square::Empty;
     let mut count_x;
     let mut count_o;
     //Checks for vertical and horizontal wins
@@ -31,36 +41,38 @@ fn winner(board: Vec<Vec<Field>>) -> Field {
     count_o = 0;
     //Checks for diagonal wins from top left to bottom right
     for i in 0..3 {
-        if board[i][i] == Field::X {
+        if board[i][i] == Square::X {
             count_x += 1;
         }
-        if board[i][i] == Field::O {
+        if board[i][i] == Square::O {
             count_o += 1;
         }
     }
-    winner = morethanthree(count_x, count_o, winner);
+    winner = morethantwo(count_x, count_o, winner);
     //Checks for diagonal wins from top right to bottom left
     count_x = 0;
     count_o = 0;
     for i in 0..3 {
-        if board[i][2 - i] == Field::X {
+        if board[i][2 - i] == Square::X {
             count_x += 1;
         }
-        if board[i][2 - i] == Field::O {
+        if board[i][2 - i] == Square::O {
             count_o += 1;
         }
     }
-    winner = morethanthree(count_x, count_o, winner);
+    winner = morethantwo(count_x, count_o, winner);
     winner
 }
 
-fn morethanthree(count_x: u32, count_o: u32, previous_winner: Field) -> Field {
-    let mut winner: Field = previous_winner;
+fn morethantwo(count_x: u32, count_o: u32, previous_winner: Square) -> Square {
+    let mut winner: Square = previous_winner;
     if count_x == 3 {
-        winner = Field::X;
+        winner = Square::X;
     }
     if count_o == 3 {
-        winner = Field::O;
+        winner = Square::O;
     }
     winner
 }
+
+ 
