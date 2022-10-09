@@ -6,6 +6,21 @@ enum Square {
     Empty,
 }
 
+impl From<&str> for Square {
+    ///Converts an String input into a Square enum
+    fn from(input: &str) -> Square {
+        let output: Square;
+        if input == "X" {
+            output = Square::X;
+        } else if input == "O" {
+            output = Square::O;
+        } else {
+            output = Square::Empty;
+        }
+        output
+    }
+}
+
 fn main() {
     print!("Please enter the playing field (X,O, ,...):");
     let mut input: String = String::new();
@@ -14,14 +29,13 @@ fn main() {
         Ok(_n) => println!("Input accepted."),
         Err(e) => println!("error: {}", e),
     }
-
     //Removes the newline from the string
     input.pop();
     //Converts string to one dimensional vector with Square enum type
     let temp_board: Vec<Square> = input
         .split_terminator(",")
         .filter(|x| ["X", "O", " "].contains(x))
-        .map(|s| convert_string_to_square(s))
+        .map(|s| s.into())
         .collect();
     //Convert one dimensional vector to two dimensions
     let board: Vec<_> = temp_board.chunks(3).map(|slice| slice.to_vec()).collect();
@@ -108,17 +122,4 @@ fn print_board(board: &Vec<Vec<Square>>) {
         print!("|\n");
         println!("+---+---+---+");
     }
-}
-
-///Converts an String input into a Square enum
-fn convert_string_to_square(input: &str) -> Square {
-    let output: Square;
-    if input == "X" {
-        output = Square::X;
-    } else if input == "O" {
-        output = Square::O;
-    } else {
-        output = Square::Empty;
-    }
-    output
 }
