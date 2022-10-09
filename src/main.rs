@@ -25,23 +25,34 @@ fn main() {
         .collect();
     //Convert one dimensional vector to two dimensions
     let board: Vec<_> = temp_board.chunks(3).map(|slice| slice.to_vec()).collect();
-
+  
     print_board(&board);
-    println!("Winner: {:?}", winner(board));
+    match winner(board) {
+        Ok(_n) => println!("{:?}", _n),
+        Err(e) => println!("Dimensions of given board are not 3x3. Reason: {}", e)
+    }
 }
 
 ///Determines the winner of a given board
-fn winner(board: Vec<Vec<Square>>) -> Square {
+fn winner(board: Vec<Vec<Square>>) -> Result<Square,String> {
     let mut winner: Square = Square::Empty;
     let mut count_x: usize;
     let mut count_o: usize;
+    //Check if given board is valid
+    if board.len() != 3 {
+        return Err("Wrong amount of rows.".to_string());
+    }
+    if board[2].len() != 3 {
+        return Err("Wrong amount of columns.".to_string());
+    }
+
     //Checks for vertical and horizontal wins
     for x in 0..3 {
         if board[x][0] == board[x][1] && board[x][1] == board[x][2] {
-            return board[x][0];
+            return Ok(board[x][0]);
         }
         if board[0][x] == board[1][x] && board[1][x] == board[2][x] {
-            return board[0][x];
+            return Ok(board[0][x]);
         }
     }
     count_x = 0;
@@ -68,7 +79,7 @@ fn winner(board: Vec<Vec<Square>>) -> Square {
         }
     }
     winner = morethantwo(count_x, count_o, winner);
-    winner
+    Ok(winner)
 }
 
 ///Checks if counter variables are larger than two and keeps the previous winner if not
