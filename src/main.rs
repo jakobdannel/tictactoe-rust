@@ -86,8 +86,8 @@ fn morethantwo(count_x: usize, count_o: usize, previous_winner: Square) -> Squar
 ///Prints a given board with borders
 fn print_board(board: &Vec<Vec<Square>>) {
     println!("+---+---+---+");
-    for x in 0..3 {
-        for y in 0..3 {
+    for x in 0..board.len() {
+        for y in 0..board[x].len() {
             if board[x][y] != Square::Empty {
                 print!("| {:?} ", board[x][y]);
             } else {
